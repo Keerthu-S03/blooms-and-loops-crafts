@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Place an Order | Bloom & Loop Crafts{% endblock %}
+
+{% block content %}
+<section class="welcome">
+    <h2>Place Your Order</h2>
+    <p>Tell us what handmade creation you would like.</p>
+</section>
+
+<section class="order-form">
+    <form method="POST" action="{{ url_for('order') }}">
+        <input type="hidden"
+       name="csrf_token"
+       value="{{ csrf_token() }}">
+        <label for="customer_name">Your Name</label>
+        <input type="text" id="customer_name" name="customer_name"
+               maxlength="100" required>
+
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email"
+               maxlength="254" required>
+
+        <label for="product_name">Choose a Product</label>
+        <select id="product_name" name="product_name" required>
+            {% for product in products %}
+            <option value="{{ product.name }}"
+                {% if selected and selected.id == product.id %}selected{% endif %}>
+                {{ product.name }} — ₹{{ product.price }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <label for="quantity">Quantity (1–20)</label>
+        <input type="number" id="quantity" name="quantity"
+               min="1" max="20" value="1" required>
+
+        <label for="notes">Customisation Notes (optional)</label>
+        <textarea id="notes" name="notes" maxlength="1000"
+                  rows="4" placeholder="Colours, size, or special requests"></textarea>
+                  <!-- PAYMENT METHOD -->
+
+<div class="payment-section">
+
+    <h2>💳 Select Payment Method</h2>
+
+    <label>
+        <input type="radio"
+               name="payment_method"
+               value="COD"
+               required>
+        Cash on Delivery
+    </label>
+
+    <br><br>
+
+    <label>
+        <input type="radio"
+               name="payment_method"
+               value="ONLINE"
+               required>
+        Online Payment
+    </label>
+
+</div>
+
+        <button type="submit">Submit Order Request</button>
+    </form>
+</section>
+{% endblock %}
+

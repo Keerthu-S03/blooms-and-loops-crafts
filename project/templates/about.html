@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="about-hero">
+    <h1>About Bloom & Loop Crafts</h1>
+    <p>Every creation has a story, and every stitch is made with love.</p>
+</section>
+
+<section class="about-container">
+
+    <div class="about-intro">
+        <div class="about-image">
+            <img src="{{ url_for('static', filename='images/keerthu/crochet_bouquet.jpg') }}"
+                 alt="Handmade crochet bouquet">
+        </div>
+
+        <div class="about-text">
+            <h2>Welcome to Our Handmade World!</h2>
+            <p>
+                Bloom & Loop Crafts is a creative handmade craft
+                collection where imagination meets art.
+                We believe that handmade gifts carry a special
+                meaning and bring happiness to everyone.
+            </p>
+
+            <p>
+                Our creations are made with creativity, patience
+                and care. From colourful crochet flowers to
+                beautiful pipe cleaner bouquets, every product
+                is designed to make special moments memorable.
+            </p>
+        </div>
+    </div>
+
+    <div class="about-story">
+        <h2>Our Story</h2>
+        <p>
+            Bloom & Loop Crafts celebrates the beauty of
+            handmade creations. Our love for flowers, colours
+            and creative designs inspires us to make unique
+            products that can be gifted to loved ones or used
+            to decorate special spaces.
+        </p>
+    </div>
+
+    <div class="about-features">
+        <div>
+            <h2>🌸 Our Mission</h2>
+            <p>
+                To spread happiness through beautiful,
+                creative and thoughtful handmade gifts.
+            </p>
+        </div>
+
+        <div>
+            <h2>🧶 What We Create</h2>
+            <p>
+                Crochet bouquets, crochet keychains,
+                handmade plushies, pipe cleaner flowers
+                and customised gifts.
+            </p>
+        </div>
+
+        <div>
+            <h2>💗 Why Choose Us?</h2>
+            <p>
+                Creative designs, thoughtful details,
+                unique handmade products and lots of love
+                in every creation.
+            </p>
+        </div>
+    </div>
+
+    <div class="about-ending">
+        <h2>Made with Love, Just for You!</h2>
+        <p>
+            Thank you for being part of our handmade journey.
+            Let us make your special moments more colourful!
+        </p>
+        <a href="{{ url_for('products') }}" class="button">
+            Explore Our Products
+        </a>
+    </div>
+
+</section>
+
+{% endblock %}
+

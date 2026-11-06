@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Bloom & Loop Crafts</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f8f1ed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .register-box {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px #00000015;
+            text-align: center;
+        }
+
+        h1 { color: #a65d70; }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin: 12px 0;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #a65d70;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        a { color: #a65d70; }
+
+        .error { color: #c0392b; }
+    </style>
+</head>
+
+<body>
+    <div class="register-box">
+
+        <h1>Bloom & Loop 🌸</h1>
+        <p>Create your customer account</p>
+
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <p class="error">{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('register') }}">
+
+            <input type="hidden" name="csrf_token"
+                   value="{{ csrf_token() }}">
+
+            <input type="text" name="name"
+                   placeholder="Your Name" required>
+
+            <input type="email" name="email"
+                   placeholder="Your Email" required>
+
+            <input type="password" name="password"
+                   placeholder="Create Password (8 characters minimum)"
+                   minlength="8" required>
+
+            <button type="submit">Create Account</button>
+
+        </form>
+
+        <p>Already have an account?</p>
+        <a href="{{ url_for('login') }}">Login Here</a>
+
+    </div>
+</body>
+</html>

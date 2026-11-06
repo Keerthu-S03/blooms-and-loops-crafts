@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Order Requests | Bloom & Loop Crafts{% endblock %}
+
+{% block content %}
+<section class="welcome">
+    <h2>Order Requests</h2>
+    <p>Order requests saved in the project database.</p>
+</section>
+
+<section class="products">
+    {% if orders %}
+    <div class="product-grid">
+        {% for order in orders %}
+        <article class="product-card">
+            <h3>Order #{{ order.id }}</h3>
+            <p><strong>Customer:</strong> {{ order.customer_name }}</p>
+            <p><strong>Email:</strong> {{ order.email }}</p>
+            <p><strong>Product:</strong> {{ order.product_name }}</p>
+            <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+            <p><strong>Notes:</strong> {{ order.notes or 'None' }}</p>
+            <p><strong>Status:</strong> {{ order.status }}</p>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No order requests have been submitted yet.</p>
+    {% endif %}
+</section>
+{% endblock %}
+

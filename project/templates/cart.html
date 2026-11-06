@@ -1,0 +1,513 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="shopping-cart">
+
+    <h1>My Shopping Cart 🛍️</h1>
+
+    {% if cart_items %}
+
+    <!-- DELIVERY ESTIMATE -->
+
+    <div class="delivery-estimate">
+        <h3>🚚 Delivery in 2–3 days</h3>
+        <p>Your handmade products will be delivered to your address.</p>
+    </div>
+
+    <!-- CART PRODUCTS -->
+
+    {% for item in cart_items %}
+
+    <div class="cart-product">
+
+        <img
+            src="{{ url_for('static', filename='images/keerthu/' + item.product.image) }}"
+            alt="{{ item.product.name }}"
+        >
+
+        <div class="cart-product-info">
+
+            <h3>{{ item.product.name }}</h3>
+
+            <p>{{ item.product.description }}</p>
+
+            <p>
+                Original / Listed Price:
+                <strong>₹{{ item.product.price }}</strong>
+            </p>
+
+            <p>Quantity: {{ item.quantity }}</p>
+
+            <h3 class="item-total">
+                Total Product Price: ₹{{ item.item_total }}
+            </h3>
+
+            <!-- QUANTITY BUTTONS -->
+
+            <div class="quantity-controls">
+
+                <form method="POST"
+                      action="{{ url_for('update_cart', product_id=item.product.id) }}">
+
+                    <input type="hidden"
+                           name="csrf_token"
+                           value="{{ csrf_token() }}">
+
+                    <input type="hidden"
+                           name="action"
+                           value="decrease">
+
+                    <button type="submit">−</button>
+
+                </form>
+
+                <span>{{ item.quantity }}</span>
+
+                <form method="POST"
+                      action="{{ url_for('update_cart', product_id=item.product.id) }}">
+
+                    <input type="hidden"
+                           name="csrf_token"
+                           value="{{ csrf_token() }}">
+
+                    <input type="hidden"
+                           name="action"
+                           value="increase">
+
+                    <button type="submit">+</button>
+
+                </form>
+
+            </div>
+
+            <!-- REMOVE PRODUCT -->
+
+            <form method="POST"
+                  action="{{ url_for('remove_from_cart', product_id=item.product.id) }}">
+
+                <input type="hidden"
+                       name="csrf_token"
+                       value="{{ csrf_token() }}">
+
+                <button type="submit" class="remove-btn">
+                    Remove Item
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+
+    <!-- TOTAL PRICE -->
+
+    <div class="cart-total">
+
+        <h2>Price Details</h2>
+
+        <p>
+            Total Items:
+            {{ cart_items|sum(attribute='quantity') }}
+        </p>
+
+        <p>
+            Total Product Price:
+            ₹{{ total }}
+        </p>
+
+        <h2 class="grand-total">
+            Grand Total: ₹{{ total }}
+        </h2>
+
+    </div>
+
+
+    <!-- CUSTOMER ADDRESS -->
+
+    <div class="address-section">
+
+        <h2>📍 Delivery Address</h2>
+
+        {% if address %}
+
+        <div class="saved-address">
+
+            <h3>{{ address.recipient_name }}</h3>
+
+            <p>{{ address.phone }}</p>
+
+            <p>{{ address.address_line }}</p>
+
+            <p>
+                {{ address.city }},
+                {{ address.state }} -
+                {{ address.pincode }}
+            </p>
+
+            <p class="address-saved">
+                ✓ Address Saved
+            </p>
+
+            <h3>Update Address</h3>
+
+        </div>
+
+        {% else %}
+
+        <p>Please enter your delivery address.</p>
+
+        {% endif %}
+
+
+        <!-- ADDRESS FORM -->
+
+        <form method="POST"
+              action="{{ url_for('add_address') }}">
+
+            <input type="hidden"
+                   name="csrf_token"
+                   value="{{ csrf_token() }}">
+
+            <input type="text"
+                   name="recipient_name"
+                   placeholder="Customer Name"
+                   value="{{ address.recipient_name if address else '' }}"
+                   maxlength="100"
+                   required>
+
+            <input type="tel"
+                   name="phone"
+                   placeholder="10-digit Mobile Number"
+                   value="{{ address.phone if address else '' }}"
+                   pattern="[0-9]{10}"
+                   maxlength="10"
+                   required>
+
+            <textarea
+                name="address_line"
+                placeholder="House No, Street, Area"
+                required>{{ address.address_line if address else '' }}</textarea>
+
+            <input type="text"
+                   name="city"
+                   placeholder="City"
+                   value="{{ address.city if address else '' }}"
+                   required>
+
+            <input type="text"
+                   name="state"
+                   placeholder="State"
+                   value="{{ address.state if address else '' }}"
+                   required>
+
+            <input type="text"
+                   name="pincode"
+                   placeholder="6-digit Pincode"
+                   value="{{ address.pincode if address else '' }}"
+                   pattern="[0-9]{6}"
+                   maxlength="6"
+                   required>
+
+            <button type="submit" class="address-btn">
+
+                {% if address %}
+                    Update Address
+                {% else %}
+                    Save Address
+                {% endif %}
+
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- FLIPKART STYLE PLACE ORDER BUTTON -->
+
+    {% if address %}
+
+    <div class="place-order-section">
+
+        <div class="order-summary">
+
+            <h2>Order Summary</h2>
+
+            <p>Total Items: {{ cart_items|sum(attribute='quantity') }}</p>
+
+            <h2>Grand Total: ₹{{ total }}</h2>
+
+            <p>🚚 Delivery in 2–3 days</p>
+
+            <p>💵 Payment Method: Cash on Delivery</p>
+
+        </div>
+
+        <form method="POST"
+              action="{{ url_for('place_order') }}">
+
+            <input type="hidden"
+                   name="csrf_token"
+                   value="{{ csrf_token() }}">
+
+            <button type="submit"
+                    class="place-order-btn">
+
+                PLACE ORDER →
+
+            </button>
+
+        </form>
+
+    </div>
+
+    {% else %}
+
+    <div class="place-order-section">
+
+        <p>📍 Please save your delivery address to place your order.</p>
+
+        <button type="button"
+                class="place-order-btn"
+                disabled>
+
+            SAVE ADDRESS FIRST
+
+        </button>
+
+    </div>
+
+    {% endif %}
+
+
+    {% else %}
+
+    <!-- EMPTY CART -->
+
+    <div class="empty-cart">
+
+        <h2>Your cart is empty! 🛍️</h2>
+
+        <p>Add some beautiful handmade products to your cart.</p>
+
+        <a href="{{ url_for('products') }}">
+            Explore Products
+        </a>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- CART PAGE STYLING -->
+
+<style>
+
+.shopping-cart {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.shopping-cart h1 {
+    margin-bottom: 25px;
+}
+
+.delivery-estimate {
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.cart-product {
+    display: flex;
+    gap: 25px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+}
+
+.cart-product img {
+    width: 180px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.cart-product-info {
+    flex: 1;
+}
+
+.item-total {
+    color: #2874f0;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.quantity-controls form {
+    margin: 0;
+}
+
+.quantity-controls button {
+    width: 35px;
+    height: 35px;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.remove-btn {
+    background: white;
+    border: 1px solid #ddd;
+    color: #d32f2f;
+    padding: 9px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cart-total {
+    background: #f7f7f7;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 25px 0;
+}
+
+.grand-total {
+    color: #2874f0;
+}
+
+.address-section {
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-top: 25px;
+}
+
+.saved-address {
+    background: #f7f7f7;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.address-saved {
+    color: green;
+    font-weight: bold;
+}
+
+.address-section input,
+.address-section textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.address-section textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.address-btn {
+    width: 100%;
+    padding: 13px;
+    background: #2874f0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.place-order-section {
+    margin-top: 30px;
+    padding: 25px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.order-summary {
+    margin-bottom: 20px;
+}
+
+.order-summary h2 {
+    color: #2874f0;
+}
+
+.place-order-btn {
+    width: 100%;
+    padding: 16px;
+    background: #fb641b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.place-order-btn:hover {
+    background: #e85b16;
+}
+
+.place-order-btn:disabled {
+    background: #999;
+    cursor: not-allowed;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.empty-cart a {
+    display: inline-block;
+    background: #2874f0;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+@media (max-width: 600px) {
+
+    .cart-product {
+        flex-direction: column;
+    }
+
+    .cart-product img {
+        width: 100%;
+        height: 230px;
+    }
+
+    .shopping-cart {
+        padding: 12px;
+    }
+
+}
+
+</style>
+
+{% endblock %}
