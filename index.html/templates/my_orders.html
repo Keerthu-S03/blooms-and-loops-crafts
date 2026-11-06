@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="my-orders">
+
+    <h1>My Orders</h1>
+    <p>Track and manage your orders.</p>
+
+    {% if orders %}
+
+        {% for order in orders %}
+
+        <div class="order-card">
+
+            <div class="order-heading">
+                <h3>Order #{{ order.id }}</h3>
+                <span>{{ order.created_at }}</span>
+            </div>
+
+            <hr>
+
+            <h3>{{ order.product_name }}</h3>
+
+            <p>Quantity: {{ order.quantity }}</p>
+
+            <p>
+                Total Price:
+                ₹{{ "%.2f"|format(order.price * order.quantity) }}
+            </p>
+
+            <p>Order Status:</p>
+
+            <div class="order-status">
+                <strong>{{ order.status }}</strong>
+            </div>
+            {% if order.status in ['Pending', 'Confirmed'] %}
+
+<form method="POST"
+      action="{{ url_for('cancel_order', order_id=order.id) }}">
+
+    <input type="hidden"
+           name="csrf_token"
+           value="{{ csrf_token() }}">
+
+    <button type="submit"
+            onclick="return confirm('Are you sure you want to cancel this order?')"
+            class="cancel-order-btn">
+
+        Cancel Order
+
+    </button>
+
+</form>
+
+{% endif %}
+
+            <div class="status-tracker">
+
+                {% for step in [
+                    'Pending',
+                    'Confirmed',
+                    'Shipped',
+                    'Out for Delivery',
+                    'Delivered'
+                ] %}
+
+                <div class="status-step
+                {% if step == order.status %}active{% endif %}
+                {% if order.status == 'Delivered' %}completed{% endif %}">
+
+                    <span>●</span>
+                    <small>{{ step }}</small>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% if order.status == 'Cancelled' %}
+                <p class="cancelled">This order has been cancelled.</p>
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty-orders">
+            <h2>No orders yet!</h2>
+            <p>Your orders will appear here.</p>
+            <a href="{{ url_for('products') }}">Explore Products</a>
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

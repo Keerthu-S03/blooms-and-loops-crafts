@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+</head>
+
+<body>
+
+    <h1>Bloom & Loop Crafts</h1>
+
+    <h2>Welcome, {{ session.admin_username }}!</h2>
+
+    <h3>Admin Dashboard</h3>
+
+    <p>Manage your website here.</p>
+
+    <a href="{{ url_for('products') }}">Manage Products</a>
+
+    <form action="{{ url_for('logout') }}" method="POST">
+        <input type="hidden" name="csrf_token"
+               value="{{ csrf_token() }}">
+        <button type="submit">Logout</button>
+    </form>
+
+</body>
+</html>

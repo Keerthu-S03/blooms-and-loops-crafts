@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Our Products | Bloom & Loop Crafts{% endblock %}
+
+{% block content %}
+<section class="welcome">
+    <h2>Our Handmade Products</h2>
+    <p>Choose a handmade gift made with love.</p>
+</section>
+
+<section class="products">
+    <form method="GET" action="{{ url_for('products') }}" class="filter-form">
+
+    <div class="filter-group">
+        <label for="category">Shop by Category</label>
+        <select name="category" id="category">
+            <option value="">All Categories</option>
+            {% for category in categories %}
+            <option value="{{ category }}"
+                {% if category == selected_category %}selected{% endif %}>
+                {{ category }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <label for="price_range">Filter by Price</label>
+        <select name="price_range" id="price_range">
+            <option value="">All Prices</option>
+            <option value="0-500">Under ₹500</option>
+            <option value="500-1000">₹500 - ₹1,000</option>
+            <option value="1000-2000">₹1,000 - ₹2,000</option>
+            <option value="2000-5000">₹2,000 - ₹5,000</option>
+            <option value="5000+">Above ₹5,000</option>
+        </select>
+    </div>
+
+    <button type="submit" class="button">Apply Filters</button>
+    <a href="{{ url_for('products') }}" class="clear-filter">
+        Clear Filters
+    </a>
+
+</form>
+
+    <div class="product-grid">
+        {% for product in products %}
+    
+        <article class="product-card">
+            <img
+    src="{{ url_for('static', filename='images/keerthu/' ~ product.image) }}"
+    alt="{{ product.name }}"
+    class="product-image"
+>
+            <div class="product-emoji">{{ product.emoji }}</div>
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description }}</p>
+            <p><strong>Price: ₹{{ product.price }}</strong></p>
+            <a class="button"
+               href="{{ url_for('order', product=product.id) }}">
+                Order Now
+            </a>
+
+            <form action="{{ url_for('add_to_cart', product_id=product.id) }}"
+      method="POST">
+
+    <input type="hidden"
+           name="csrf_token"
+           value="{{ csrf_token() }}">
+
+    <button type="submit">
+        Add to Cart
+    </button>
+
+</form>
+        </article>
+        {% else %}
+        <p>No products found in this category.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

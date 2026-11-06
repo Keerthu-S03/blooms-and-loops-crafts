@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="contact-page">
+
+    <h1>Contact Bloom & Loop Crafts 🌸</h1>
+
+    <p class="contact-intro">
+        We'd love to hear from you!
+        Have questions about our crochet creations or
+        pipe-cleaner flowers? Get in touch with us.
+    </p>
+
+    <div class="contact-gallery">
+
+        <div>
+            <img src="{{ url_for('static', filename='images/keerthu/crochet_bouquet.jpg') }}"
+                 alt="Handmade crochet bouquet">
+            <h3>Crochet Creations</h3>
+        </div>
+
+        <div>
+            <img src="{{ url_for('static', filename='images/keerthu/daisy_flower.jpg') }}"
+                 alt="Handmade flower craft">
+            <h3>Handmade Flowers</h3>
+        </div>
+
+        <div>
+            <img src="{{ url_for('static', filename='images/keerthu/flower_pot.jpg') }}"
+                 alt="Decorative handmade flower pot">
+            <h3>Beautiful Gifts</h3>
+        </div>
+
+    </div>
+
+    <div class="contact-details">
+
+        <h2>Get in Touch 💌</h2>
+
+        <p>📧 Email:
+            <a href="mailto:yourshop@email.com">
+                yourshop@email.com
+            </a>
+        </p>
+
+        <p>📸 Instagram:
+            <a href="https://www.instagram.com/">
+                Visit our Instagram
+            </a>
+        </p>
+
+        <p>🧶 Products: Crochet and Pipe Cleaner Crafts</p>
+
+        <p>🎁 Custom orders: Contact us to discuss your ideas!</p>
+
+    </div>
+
+</section>
+
+{% endblock %}
+

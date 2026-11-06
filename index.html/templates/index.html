@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloom & Loop Crafts</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Bloom & Loop Crafts</h1>
+        <p>Handmade with love, crafted just for you.</p>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/products">Products</a>
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+    <img
+        src="{{ url_for('static', filename='images/craft-bg.png') }}"
+        alt="Bloom and Loop Crafts"
+        class="hero-image"
+    >
+</section>
+        <section class="welcome">
+            <h2>Welcome to Our Handmade World!</h2>
+            <p>Discover beautiful crochet flowers, pipe cleaner bouquets,
+               keychains and unique handmade gifts.</p>
+            <a class="button" href="/products">Explore Our Products</a>
+        </section>
+
+        <section class="products">
+            <h2>Our Featured Products</h2>
+            {% for product in products %}
+            <article class="product-card">
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description }}</p>
+                <p>Price: ₹{{ product.price }}</p>
+                <a href="/products">View Products</a>
+            </article>
+            {% endfor %}
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Bloom & Loop Crafts. Handmade with love.</p>
+    </footer>
+</body>
+</html>
+
+
